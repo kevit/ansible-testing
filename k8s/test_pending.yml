@@ -1,0 +1,16 @@
+---
+- name: Check if there pending
+  hosts: localhost
+  tasks:
+
+    - name: Search for all running pods
+      k8s_info:
+        kind: Pod
+        field_selectors:
+          - status.phase=Pending
+      register: k8s_pending
+      failed_when: "k8s_pending| json_query('resources[*].status.containerStatuses[*].state.waiting.reason') == 'ImagePullBackOff' "
+    - debug:
+        msg: "{{k8s_pending}}"
+
+    

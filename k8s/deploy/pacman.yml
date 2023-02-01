@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: pacman
+  namespace: pacman
+  name: pacman
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        name: pacman
+  template:
+    metadata:
+      labels:
+        name: pacman
+    spec:
+      containers:
+ #     - image: kevit/pacman-nodejs-app:latest
+      - image: docker.io/library/pacman-nodejs-app:latest
+ # minikube specifics
+        imagePullPolicy: Never
+        name: pacman
+        ports:
+        - containerPort: 8080
+          name: http-server

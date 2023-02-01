@@ -1,0 +1,13 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: collect facts
+      setup:
+        gather_subset: ['env','!all','!min']
+
+- hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: collect facts
+      setup:
+        gather_subset: ['env','!all','!min']

@@ -1,0 +1,24 @@
+
+server: {
+    nginx: {
+        blackjack_front
+        keystore
+        blackjack_back
+    }
+}
+client: {
+    blackjack_front.style.fill: honeydew
+}
+explanation: |md
+  # Blackjack
+  - Lets us check how it works
+| { near: top-center }
+
+## Getting frontend into browser
+client <-> server.nginx.blackjack_front: "https://blackjack"
+## Frontend calling API via NGINX
+client.blackjack_front -> server.nginx.blackjack_back: "https://blackjack/api"
+## NGINX using blackjack_back as backend
+server.nginx.blackjack_back -> server.blackjack_back: "http://localhost:3000"
+## blackjack_back calling keystore to retrieve a key
+server.blackjack_back -> server.nginx.keystore: "http://localhost:4545"

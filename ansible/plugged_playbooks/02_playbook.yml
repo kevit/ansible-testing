@@ -1,0 +1,7 @@
+- name: Multilevel 002
+  hosts: localhost
+  tasks:
+
+    - name: Task #2
+      ansible.builtin.debug:
+        msg: "This statement will be printed"

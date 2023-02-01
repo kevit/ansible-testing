@@ -1,0 +1,11 @@
+---
+- name: Cleaning
+  hosts: localhost
+  tasks:
+
+    - name: Remove namespace
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: pacman
+        state: absent

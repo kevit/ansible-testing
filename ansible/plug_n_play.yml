@@ -1,0 +1,21 @@
+- import_playbook: plugged_playbooks/01_playbook.yml
+- import_playbook: plugged_playbooks/02_playbook.yml
+
+
+- name: Multilevel 003
+  hosts: localhost
+  tasks:
+
+    - name: Task #2
+      ansible.builtin.debug:
+        msg: "This statement will be printed"
+    - import_task: plugged_playbooks/03_task.yml
+
+- name: Multilevel 004
+  hosts: localhost
+  tasks:
+
+    - name: Task #2
+      ansible.builtin.debug:
+        msg: "This statement will be printed"
+

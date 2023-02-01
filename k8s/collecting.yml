@@ -1,0 +1,68 @@
+---
+- name: Get info about cluster
+  hosts: localhost
+  tasks:
+
+    - name: check kubectl version
+      command: kubectl version --client=true --output=yaml
+      register: kubectl_output
+
+    - set_fact: 
+        kubectl_facts={{ kubectl_output.stdout | from_yaml}}
+
+    - name: debug
+      debug:
+        msg: "{{ kubectl_facts.clientVersion.gitVersion }}"
+
+    - name: Get info about cluster
+      kubernetes.core.k8s_cluster_info:
+      register: api_status
+    
+    - name: Print cluster status
+      debug:
+        msg: "{{ api_status }}"
+
+    - name: Getting info about nodes using lookups
+      ## ansible-doc -t lookup -l
+      set_fact:
+        k8s_nodes: "{{ lookup('k8s', api_version='v1', kind='node') }}"
+     
+    - name: Print nodes
+      debug:
+        msg: "{{ k8s_nodes }}"
+
+    - name: Getting info about pod
+      kubernetes.core.k8s_info:
+        kind: Pod
+        label_selectors:
+          - "name = pacman"
+        field_selectors:
+          - status.phase=Pending
+      register: pod_status
+      ## you can loop over   loop: "{{ pod_list | json_query('resources[*].metadata.name') }}"
+
+   
+    - name: Pring pending
+      debug:
+        msg: >
+         "{{ pod_status | json_query('resources[*].metadata.labels.name') }} pending  
+         with reason {{ pod_status | json_query('resources[*].status.containerStatuses[*].image') }} 
+         is in  {{ pod_status | json_query('resources[*].status.containerStatuses[*].state.waiting.reason')|regex_search('ImagePullBackOff')}}"
+    
+        
+    # - name: Print pod status
+    #   debug:
+    #     msg: "{{ pod_status }}"
+
+    # - name: Getting log from a Pod
+    #   kubernetes.core.k8s_log:
+    #     api_version: apps/v1
+    #     kind: Deployment
+    #     namespace: pacman
+    #     name: pacman
+    #   register: log_status
+
+    # - name: Print log status
+    #   debug:
+    #     msg: "{{ log_status }}"
+

@@ -1,0 +1,16 @@
+---
+- name: Deploy pacman
+  hosts: localhost
+  tasks:
+    - name: Apply K8s resources
+      kubernetes.core.k8s:
+        validate: ## kubernetes-validate required
+          fail_on_error: no
+          strict: yes
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "./deploy/namespace.yml"
+        - "./deploy/pvc.yml"
+        - "./deploy/mongo.yml"
+        - "./deploy/lb.yml"
+        - "./deploy/pacman.yml"

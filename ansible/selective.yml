@@ -1,0 +1,12 @@
+- name: Multiple checks
+  hosts: localhost
+  tasks:
+
+    - name: Task #1
+      ansible.builtin.debug:
+        msg: "This statement will not be printed"
+
+    - name: Task #2
+      ansible.builtin.debug:
+        msg: "This statement will be printed"
+      tags: [print_action]

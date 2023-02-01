@@ -1,0 +1,3 @@
+- name: Task #3
+    ansible.builtin.debug:
+      msg: "This statement will be printed"

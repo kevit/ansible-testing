@@ -1,0 +1,28 @@
+- name: Check if Rhein today is not deep enough
+  hosts: localhost
+  tasks:
+# Lookups can be useful but difficult to debug
+#    - name: Receive information
+#      ansible.builtin.set_fact:
+#        rhein_level: "{{ lookup('url', 'https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/BONN/W/currentmeasurement.json') | json_filter('value')   }}"
+
+# If server respond application/json work with json is quite easy and fun
+# Content-Type: application/json;charset=UTF-8
+
+    - name: Requesting current Rhein level info
+      uri: 
+        url: https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/BONN/W/currentmeasurement.json
+        method: GET
+        return_content: yes
+        status_code: 200
+        body_format: json
+      register: rhein_level
+
+    - name: Check level
+      assert:
+        that:
+          - rhein_level.json.value | int >= 60
+        fail_msg: "Water level is too low"   
+
+    - debug:
+        msg: "Actual level is {{rhein_level.json.value}} cm"
