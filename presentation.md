@@ -53,7 +53,7 @@ ansible server01 -i inventory.ini -a "date"
 
 ## How Ansible works
 
-![img](images/ansible_architecture.png)
+![img](images/ansible_architecture.jpg)
 
 ---
 
@@ -112,7 +112,7 @@ winrm                          Run tasks over Microsoft's WinRM
 
 ---
 
-![bg right 100%](images/ansible_architecture.png)
+![bg right 100%](images/ansible_architecture.jpg)
 
 ## Callbacks: change output
 
@@ -220,8 +220,6 @@ example of community.general.selective
               "Ansible task surprisingly went well"
           disable_web_page_preview: true
           disable_notification: false
-
-
 ```
 
 ---
@@ -298,7 +296,6 @@ example of community.general.selective
 
 ## This is fine!
 
-![bg right 80%](images/fine.jpg)
 
 The max_fail_percentage setting applies to each batch when you use it with serial.
 
@@ -322,9 +319,6 @@ In the example above, if more than 4 of the 10 servers in any batch of servers f
 
 Advantage: single test check them all
 Disadvantage: When it fails, you don't know which component to blame
-
-
-![bg right 110%](images/again.png)
 
  
 ```yaml
@@ -355,7 +349,6 @@ Disadvantage: When it fails, you don't know which component to blame
     - name: "Check Content"
       ansible.builtin.assert:
         that: "'My webservice' is in r_working.content"
-
 ```
 
 ---
@@ -400,7 +393,6 @@ Disadvantage: When it fails, you don't know which component to blame
 ```yaml
 
 handlers:
-
         - name: local machine can reach web ports
           wait_for:
             host: "{{ inventory_hostname }}"
@@ -585,7 +577,6 @@ hostvars['inventory_hostname'].ansible_host
 ## Cloud integration tests
 
 ```yaml
-
 - name: check metadata endpoint
   uri:
     url: http://169.254.169.254/latest/meta-data/
